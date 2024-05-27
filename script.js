@@ -59,8 +59,8 @@ const getQuery = (songPath, effectAudioPath, first_time_apply, second_time_apply
     let secondMix = convertMilliseconds(second_time_apply)
     secondMix = secondMix.toString()
 
-    //const passToffmpeg = `ffmpeg -y -i "${songPath}" -i "${effectAudioPath}" -i "${effectAudioPath}" -i "${imgPath}" -filter_complex "[1:a]volume=0.5,adelay=${firstMix}|${firstMix}[a1];[2:a]volume=1.0,adelay=${secondMix}|${secondMix}[a2];[0:a][a1][a2]amix=inputs=3:duration=longest:dropout_transition=0" -map 3:0 -id3v2_version 3 -metadata:s:v title="Album cover" -metadata:s:v comment="Cover (front)" -ar 44100 -ac 2 -b:a 320k "${outSongPath}"`
-    const passToffmpeg = `ffmpeg -y -i "${songPath}" -i "${effectAudioPath}" -filter_complex  "[0:0]volume=1.8[a];[1:0]volume=0.9[b];[a][b]amix=inputs=2:duration=longest" -c:a libmp3lame "${outSongPath}"`
+    const passToffmpeg = `ffmpeg -y -i "${songPath}" -i "${effectAudioPath}" -i "${effectAudioPath}" -i "${imgPath}" -filter_complex "[1:a]volume=0.5,adelay=${firstMix}|${firstMix}[a1];[2:a]volume=1.0,adelay=${secondMix}|${secondMix}[a2];[0:a][a1][a2]amix=inputs=3:duration=longest:dropout_transition=0" -map 3:0 -id3v2_version 3 -metadata:s:v title="Album cover" -metadata:s:v comment="Cover (front)" -ar 44100 -ac 2 -b:a 320k "${outSongPath}"`
+    //const passToffmpeg = `ffmpeg -y -i "${songPath}" -i "${effectAudioPath}" -filter_complex  "[0:0]volume=1.8[a];[1:0]volume=0.9[b];[a][b]amix=inputs=2:duration=longest" -c:a libmp3lame "${outSongPath}"`
     return passToffmpeg
 }
 
