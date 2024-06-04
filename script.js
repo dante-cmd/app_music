@@ -7,9 +7,11 @@ const path_folder_songs = "C:/Users/dante/app_music/input songs"
 const path_folder_out = "C:/Users/dante/app_music/output songs"
 const path_file_effect_song = "C:/Users/dante/app_music/effect/dog-barking-70772.mp3"
 const path_file_img = "C:/Users/dante/app_music/mario_bros.jpg"
-const path_folder_normalize = `${__dirname}/normalized songs`
+
 const first_time_apply = "00:10"
 const second_time_apply = "00:50"
+
+const path_folder_normalize = `${__dirname}/normalized songs`
 const name_cd  = "mix_1"
 
 // ----------------------------------------------------------------
@@ -59,7 +61,24 @@ const getQuery = (songPath, effectAudioPath, first_time_apply, second_time_apply
     let secondMix = convertMilliseconds(second_time_apply)
     secondMix = secondMix.toString()
 
-    const passToffmpeg = `ffmpeg -y -i "${songPath}" -i "${effectAudioPath}" -i "${effectAudioPath}" -i "${imgPath}" -filter_complex "[1:a]volume=0.5,adelay=${firstMix}|${firstMix}[a1];[2:a]volume=1.0,adelay=${secondMix}|${secondMix}[a2];[0:a][a1][a2]amix=inputs=3:duration=longest:dropout_transition=0" -map 3:0 -id3v2_version 3 -metadata:s:v title="Album cover" -metadata:s:v comment="Cover (front)" -ar 44100 -ac 2 -b:a 320k "${outSongPath}"`
+    const passToffmpeg = `ffmpeg -y \
+  -i "${songPath}" \
+  -i "${effectAudioPath}" \
+  -i "${effectAudioPath}" \
+  -i "${imgPath}" \
+  -filter_complex "[1:a]adelay=${firstMix}|${firstMix}[a1];\
+                   [2:a]adelay=${secondMix}|${secondMix}[a2];\
+                   [0:a][a1][a2]amix=inputs=3:duration=first:dropout_transition=2,volume=2.0[aout];\
+                   [aout]loudnorm=I=-16:LRA=11:TP=-1.5" \
+  -map 3:0 \
+  -id3v2_version 3 \
+  -metadata:s:v title="Album cover" \
+  -metadata:s:v comment="Cover (front)" \
+  -ar 44100 \
+  -ac 2 \
+  -b:a 320k \
+  "${outSongPath}"`;
+    //const passToffmpeg = `ffmpeg -y -i "${songPath}" -i "${effectAudioPath}" -i "${effectAudioPath}" -i "${imgPath}" -filter_complex "[1:a]volume=0.5,adelay=${firstMix}|${firstMix}[a1];[2:a]volume=1.0,adelay=${secondMix}|${secondMix}[a2];[0:a][a1][a2]amix=inputs=3:duration=longest:dropout_transition=0" -map 3:0 -id3v2_version 3 -metadata:s:v title="Album cover" -metadata:s:v comment="Cover (front)" -ar 44100 -ac 2 -b:a 320k "${outSongPath}"`
     //const passToffmpeg = `ffmpeg -y -i "${songPath}" -i "${effectAudioPath}" -filter_complex  "[0:0]volume=1.8[a];[1:0]volume=0.9[b];[a][b]amix=inputs=2:duration=longest" -c:a libmp3lame "${outSongPath}"`
     return passToffmpeg
 }
@@ -122,7 +141,6 @@ items.forEach((element) => {
 })
 
 const path_file_effect_song_normal = `${path_folder_normalize}/${effect_dir}/${effect_file_name}`
-
 
 execute(normalAudio(path_file_effect_song, path_file_effect_song_normal))
 
