@@ -10,10 +10,10 @@ import subprocess
 
 path_init = Path()
 path_effect = Path('effect')
-path_input_songs = Path('input songs')
-path_output_songs = Path('output songs')
-path_cover = Path("cover")
-cd_name = 'DJ RODRI'
+path_input_songs = Path(r'C:\Users\dante\Downloads\susu')
+path_output_songs = Path(r'output songs')
+path_cover = Path(r"C:\Users\dante\work")
+cd_name = 'DJswdwddw'
 
 
 name_effect = 'dog-barking-70772.mp3'
